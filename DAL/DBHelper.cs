@@ -5,7 +5,7 @@ namespace BookLendingSystem.DAL
 {
     public class DBHelper
     {
-        private static readonly string connectionString = "server=localhost;database=mybook;uid=root;pwd=20050714;port=3306;charset=utf8;";
+        private static readonly string connectionString = "server=localhost;database=mybook;uid=root;pwd=??????;port=3306;charset=utf8;";
 
         static DBHelper()
         {
