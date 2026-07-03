@@ -122,7 +122,7 @@ private static readonly string connectionString = "server=localhost;database=myb
 
 ```powershell
 # 进入项目目录
-cd "d:\library\BookLendingSystem"
+cd "~\BookLendingSystem"
 
 # 还原依赖
 dotnet restore
