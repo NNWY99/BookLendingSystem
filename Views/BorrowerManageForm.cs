@@ -194,14 +194,14 @@ namespace BookLendingSystem.Views
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
-            tableLayoutPanel.Size = new Size(900, 580);
+            tableLayoutPanel.Size = new Size(800, 480);
             tableLayoutPanel.TabIndex = 0;
             // 
             // label1
             // 
             label1.Font = new Font("隶书", 22.2F, FontStyle.Bold, GraphicsUnit.Point, 134);
             label1.ForeColor = Color.White;
-            label1.Location = new Point(48, 0);
+            label1.Location = new Point(43, 0);
             label1.Name = "label1";
             label1.Size = new Size(225, 60);
             label1.TabIndex = 0;
@@ -212,13 +212,13 @@ namespace BookLendingSystem.Views
             // 
             txtKeyword.Dock = DockStyle.Fill;
             txtKeyword.Font = new Font("微软雅黑", 11F);
-            txtKeyword.Location = new Point(49, 65);
+            txtKeyword.Location = new Point(44, 65);
             txtKeyword.Margin = new Padding(4, 5, 4, 5);
             txtKeyword.MinimumSize = new Size(1, 16);
             txtKeyword.Name = "txtKeyword";
             txtKeyword.Padding = new Padding(5);
             txtKeyword.ShowText = false;
-            txtKeyword.Size = new Size(775, 40);
+            txtKeyword.Size = new Size(688, 40);
             txtKeyword.TabIndex = 1;
             txtKeyword.TextAlignment = ContentAlignment.MiddleLeft;
             txtKeyword.Watermark = "";
@@ -228,11 +228,11 @@ namespace BookLendingSystem.Views
             btnSearch.Dock = DockStyle.Fill;
             btnSearch.FillColor = Color.Transparent;
             btnSearch.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
-            btnSearch.Location = new Point(831, 63);
+            btnSearch.Location = new Point(739, 63);
             btnSearch.MinimumSize = new Size(1, 1);
             btnSearch.Name = "btnSearch";
             btnSearch.RectColor = Color.White;
-            btnSearch.Size = new Size(66, 44);
+            btnSearch.Size = new Size(58, 44);
             btnSearch.Style = UIStyle.Custom;
             btnSearch.TabIndex = 2;
             btnSearch.Text = "搜索";
@@ -268,7 +268,7 @@ namespace BookLendingSystem.Views
             dgvBorrowers.EnableHeadersVisualStyles = false;
             dgvBorrowers.Font = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point, 134);
             dgvBorrowers.GridColor = Color.FromArgb(80, 160, 255);
-            dgvBorrowers.Location = new Point(48, 113);
+            dgvBorrowers.Location = new Point(43, 113);
             dgvBorrowers.Name = "dgvBorrowers";
             dgvBorrowers.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -286,7 +286,7 @@ namespace BookLendingSystem.Views
             dgvBorrowers.RowsDefaultCellStyle = dataGridViewCellStyle9;
             dgvBorrowers.SelectedIndex = -1;
             dgvBorrowers.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvBorrowers.Size = new Size(777, 399);
+            dgvBorrowers.Size = new Size(690, 299);
             dgvBorrowers.StripeOddColor = Color.FromArgb(235, 243, 255);
             dgvBorrowers.TabIndex = 3;
             dgvBorrowers.SelectionChanged += dgvBorrowers_SelectionChanged;
@@ -369,10 +369,10 @@ namespace BookLendingSystem.Views
             flowLayoutPanel.Controls.Add(btnEdit);
             flowLayoutPanel.Controls.Add(btnDelete);
             flowLayoutPanel.Dock = DockStyle.Fill;
-            flowLayoutPanel.Location = new Point(48, 518);
+            flowLayoutPanel.Location = new Point(43, 418);
             flowLayoutPanel.Name = "flowLayoutPanel";
             flowLayoutPanel.Padding = new Padding(10);
-            flowLayoutPanel.Size = new Size(777, 59);
+            flowLayoutPanel.Size = new Size(690, 59);
             flowLayoutPanel.TabIndex = 4;
             // 
             // btnAdd
@@ -382,7 +382,7 @@ namespace BookLendingSystem.Views
             btnAdd.FillHoverColor = Color.FromArgb(139, 203, 83);
             btnAdd.FillPressColor = Color.FromArgb(88, 152, 32);
             btnAdd.FillSelectedColor = Color.FromArgb(88, 152, 32);
-            btnAdd.Font = new Font("微软雅黑", 11F);
+            btnAdd.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnAdd.LightColor = Color.FromArgb(245, 251, 241);
             btnAdd.Location = new Point(15, 10);
             btnAdd.Margin = new Padding(5, 0, 5, 0);
@@ -406,7 +406,7 @@ namespace BookLendingSystem.Views
             btnEdit.FillHoverColor = Color.FromArgb(227, 175, 83);
             btnEdit.FillPressColor = Color.FromArgb(176, 124, 32);
             btnEdit.FillSelectedColor = Color.FromArgb(176, 124, 32);
-            btnEdit.Font = new Font("微软雅黑", 11F);
+            btnEdit.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnEdit.LightColor = Color.FromArgb(253, 249, 241);
             btnEdit.Location = new Point(115, 10);
             btnEdit.Margin = new Padding(5, 0, 5, 0);
@@ -430,7 +430,7 @@ namespace BookLendingSystem.Views
             btnDelete.FillHoverColor = Color.FromArgb(235, 115, 115);
             btnDelete.FillPressColor = Color.FromArgb(184, 64, 64);
             btnDelete.FillSelectedColor = Color.FromArgb(184, 64, 64);
-            btnDelete.Font = new Font("微软雅黑", 11F);
+            btnDelete.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnDelete.LightColor = Color.FromArgb(253, 243, 243);
             btnDelete.Location = new Point(215, 10);
             btnDelete.Margin = new Padding(5, 0, 5, 0);
@@ -451,13 +451,13 @@ namespace BookLendingSystem.Views
             // 
             AllowShowTitle = false;
             AutoScaleMode = AutoScaleMode.None;
-            ClientSize = new Size(900, 580);
+            ClientSize = new Size(800, 480);
             Controls.Add(tableLayoutPanel);
             Name = "BorrowerManageForm";
             Padding = new Padding(0);
             ShowTitle = false;
             Text = "借阅人管理";
-            ZoomScaleRect = new Rectangle(19, 19, 900, 580);
+            ZoomScaleRect = new Rectangle(19, 19, 800, 480);
             tableLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvBorrowers).EndInit();
             flowLayoutPanel.ResumeLayout(false);

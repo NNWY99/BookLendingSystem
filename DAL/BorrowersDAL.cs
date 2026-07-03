@@ -8,59 +8,33 @@ namespace BookLendingSystem.DAL
     {
         public List<Borrowers> GetAllBorrowers()
         {
-            List<Borrowers> list = new List<Borrowers>();
-            string sql = "SELECT * FROM Borrowers";
-            DataTable dt = DBHelper.ExecuteQuery(sql);
-            foreach (DataRow row in dt.Rows)
-            {
-                list.Add(ConvertToModel(row));
-            }
-            return list;
+            return ExecuteQueryToList("SELECT * FROM Borrowers", ConvertToModel);
         }
 
         public Borrowers GetBorrowerById(int id)
         {
-            string sql = "SELECT * FROM Borrowers WHERE id = @id";
-            DataTable dt = DBHelper.ExecuteQuery(sql, new MySqlParameter("@id", id));
-            if (dt.Rows.Count > 0)
-            {
-                return ConvertToModel(dt.Rows[0]);
-            }
-            return null;
+            return ExecuteQuerySingle("SELECT * FROM Borrowers WHERE id = @id", ConvertToModel,
+                new MySqlParameter("@id", id));
         }
 
         public Borrowers GetBorrowerByIDCard(string idCard)
         {
-            string sql = "SELECT * FROM Borrowers WHERE IDCard = @idCard";
-            DataTable dt = DBHelper.ExecuteQuery(sql, new MySqlParameter("@idCard", idCard));
-            if (dt.Rows.Count > 0)
-            {
-                return ConvertToModel(dt.Rows[0]);
-            }
-            return null;
+            return ExecuteQuerySingle("SELECT * FROM Borrowers WHERE IDCard = @idCard", ConvertToModel,
+                new MySqlParameter("@idCard", idCard));
         }
 
         public Borrowers GetBorrowerByCode(int code)
         {
-            string sql = "SELECT * FROM Borrowers WHERE borrowing_code = @code";
-            DataTable dt = DBHelper.ExecuteQuery(sql, new MySqlParameter("@code", code));
-            if (dt.Rows.Count > 0)
-            {
-                return ConvertToModel(dt.Rows[0]);
-            }
-            return null;
+            return ExecuteQuerySingle("SELECT * FROM Borrowers WHERE borrowing_code = @code", ConvertToModel,
+                new MySqlParameter("@code", code));
         }
 
         public List<Borrowers> SearchBorrowers(string keyword)
         {
-            List<Borrowers> list = new List<Borrowers>();
-            string sql = "SELECT * FROM Borrowers WHERE borrowers_name LIKE @keyword OR IDCard LIKE @keyword OR tel LIKE @keyword";
-            DataTable dt = DBHelper.ExecuteQuery(sql, new MySqlParameter("@keyword", "%" + keyword + "%"));
-            foreach (DataRow row in dt.Rows)
-            {
-                list.Add(ConvertToModel(row));
-            }
-            return list;
+            return ExecuteQueryToList(
+                "SELECT * FROM Borrowers WHERE borrowers_name LIKE @keyword OR IDCard LIKE @keyword OR tel LIKE @keyword",
+                ConvertToModel,
+                new MySqlParameter("@keyword", "%" + keyword + "%"));
         }
 
         public int AddBorrower(Borrowers borrower)
@@ -94,8 +68,29 @@ namespace BookLendingSystem.DAL
 
         public int DeleteBorrower(int id)
         {
-            string sql = "DELETE FROM Borrowers WHERE id = @id";
-            return DBHelper.ExecuteNonQuery(sql, new MySqlParameter("@id", id));
+            return DBHelper.ExecuteNonQuery("DELETE FROM Borrowers WHERE id = @id",
+                new MySqlParameter("@id", id));
+        }
+
+        private List<Borrowers> ExecuteQueryToList(string sql, Func<DataRow, Borrowers> convertFunc, params MySqlParameter[] parameters)
+        {
+            List<Borrowers> list = new List<Borrowers>();
+            DataTable dt = DBHelper.ExecuteQuery(sql, parameters);
+            foreach (DataRow row in dt.Rows)
+            {
+                list.Add(convertFunc(row));
+            }
+            return list;
+        }
+
+        private Borrowers ExecuteQuerySingle(string sql, Func<DataRow, Borrowers> convertFunc, params MySqlParameter[] parameters)
+        {
+            DataTable dt = DBHelper.ExecuteQuery(sql, parameters);
+            if (dt.Rows.Count > 0)
+            {
+                return convertFunc(dt.Rows[0]);
+            }
+            return null;
         }
 
         private Borrowers ConvertToModel(DataRow row)

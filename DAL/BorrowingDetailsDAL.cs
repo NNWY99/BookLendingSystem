@@ -19,44 +19,22 @@ namespace BookLendingSystem.DAL
 
         public List<Borrowing_details> GetAllBorrowingDetails()
         {
-            List<Borrowing_details> list = new List<Borrowing_details>();
-            string sql = "SELECT * FROM Borrowing_details";
-            DataTable dt = DBHelper.ExecuteQuery(sql);
-            foreach (DataRow row in dt.Rows)
-            {
-                list.Add(ConvertToModel(row));
-            }
-            return list;
+            return ExecuteQueryToList("SELECT * FROM Borrowing_details", ConvertToModel);
         }
 
         public List<Borrowing_details> GetOverdueDetails()
         {
-            List<Borrowing_details> list = new List<Borrowing_details>();
-            string sql = "SELECT * FROM Borrowing_details WHERE return_time IS NULL AND cut_off_time < NOW()";
-            DataTable dt = DBHelper.ExecuteQuery(sql);
-            foreach (DataRow row in dt.Rows)
-            {
-                list.Add(ConvertToModel(row));
-            }
-            return list;
+            return ExecuteQueryToList("SELECT * FROM Borrowing_details WHERE return_time IS NULL AND cut_off_time < NOW()", ConvertToModel);
         }
 
         public List<Borrowing_details> GetActiveBorrowingDetails()
         {
-            List<Borrowing_details> list = new List<Borrowing_details>();
-            string sql = "SELECT * FROM Borrowing_details WHERE return_time IS NULL";
-            DataTable dt = DBHelper.ExecuteQuery(sql);
-            foreach (DataRow row in dt.Rows)
-            {
-                list.Add(ConvertToModel(row));
-            }
-            return list;
+            return ExecuteQueryToList("SELECT * FROM Borrowing_details WHERE return_time IS NULL", ConvertToModel);
         }
 
         public int UpdateReturnTime(int id, DateTime returnTime)
         {
-            string sql = "UPDATE Borrowing_details SET return_time = @returnTime WHERE id = @id";
-            return DBHelper.ExecuteNonQuery(sql,
+            return DBHelper.ExecuteNonQuery("UPDATE Borrowing_details SET return_time = @returnTime WHERE id = @id",
                 new MySqlParameter("@returnTime", returnTime),
                 new MySqlParameter("@id", id));
         }
@@ -85,6 +63,17 @@ namespace BookLendingSystem.DAL
                 LEFT JOIN Borrowers br ON brw.borrowers_id = br.id
                 WHERE bd.return_time IS NULL AND bd.cut_off_time < NOW()";
             return DBHelper.ExecuteQuery(sql);
+        }
+
+        private List<Borrowing_details> ExecuteQueryToList(string sql, Func<DataRow, Borrowing_details> convertFunc, params MySqlParameter[] parameters)
+        {
+            List<Borrowing_details> list = new List<Borrowing_details>();
+            DataTable dt = DBHelper.ExecuteQuery(sql, parameters);
+            foreach (DataRow row in dt.Rows)
+            {
+                list.Add(convertFunc(row));
+            }
+            return list;
         }
 
         private Borrowing_details ConvertToModel(DataRow row)

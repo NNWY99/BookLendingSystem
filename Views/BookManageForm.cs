@@ -17,6 +17,7 @@ namespace BookLendingSystem.Views
             InitializeComponent();
             EnableDoubleBuffering(tableLayoutPanel);
             EnableDoubleBuffering(dgvBooks);
+            LoadCategories();
             LoadBooks();
         }
 
@@ -29,12 +30,33 @@ namespace BookLendingSystem.Views
                 null, control, new object[] { true });
         }
 
-        private void LoadBooks()
+        private void LoadCategories()
+        {
+            try
+            {
+                cboCategory.Items.Clear();
+                cboCategory.Items.Add("全部类别");
+                foreach (string category in booksBLL.GetAllCategories())
+                {
+                    cboCategory.Items.Add(category);
+                }
+                cboCategory.SelectedIndex = 0;
+            }
+            catch (Exception ex)
+            {
+                UIMessageBox.ShowError($"加载类别失败：{ex.Message}");
+            }
+        }
+
+        private void LoadBooks(string category = null)
         {
             try
             {
                 dgvBooks.AutoGenerateColumns = false;
-                dgvBooks.DataSource = booksBLL.GetAllBooks();
+                if (string.IsNullOrEmpty(category) || category == "全部类别")
+                    dgvBooks.DataSource = booksBLL.GetAllBooks();
+                else
+                    dgvBooks.DataSource = booksBLL.GetBooksByCategory(category);
             }
             catch (Exception ex)
             {
@@ -53,7 +75,8 @@ namespace BookLendingSystem.Views
                         UIMessageBox.ShowSuccess("添加成功");
                     else
                         UIMessageBox.ShowError("添加失败");
-                    LoadBooks();
+                    LoadCategories();
+                    LoadBooks(cboCategory.SelectedItem?.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -80,7 +103,8 @@ namespace BookLendingSystem.Views
                         UIMessageBox.ShowSuccess("更新成功");
                     else
                         UIMessageBox.ShowError("更新失败");
-                    LoadBooks();
+                    LoadCategories();
+                    LoadBooks(cboCategory.SelectedItem?.ToString());
                 }
                 catch (Exception ex)
                 {
@@ -105,7 +129,8 @@ namespace BookLendingSystem.Views
                         UIMessageBox.ShowSuccess("删除成功");
                     else
                         UIMessageBox.ShowError("删除失败");
-                    LoadBooks();
+                    LoadCategories();
+                    LoadBooks(cboCategory.SelectedItem?.ToString());
                     currentBook = null;
                 }
                 catch (Exception ex)
@@ -121,7 +146,7 @@ namespace BookLendingSystem.Views
             try
             {
                 if (string.IsNullOrEmpty(keyword))
-                    LoadBooks();
+                    LoadBooks(cboCategory.SelectedItem?.ToString());
                 else
                     dgvBooks.DataSource = booksBLL.SearchBooks(keyword);
             }
@@ -129,6 +154,23 @@ namespace BookLendingSystem.Views
             {
                 UIMessageBox.ShowError($"搜索失败：{ex.Message}");
             }
+        }
+
+        private void btnDetail_Click(object sender, EventArgs e)
+        {
+            if (currentBook == null)
+            {
+                UIMessageBox.ShowWarning("请先选择要查看的图书");
+                return;
+            }
+
+            BookDetailDialog dialog = new BookDetailDialog(currentBook);
+            dialog.ShowDialog(this);
+        }
+
+        private void cboCategory_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadBooks(cboCategory.SelectedItem?.ToString());
         }
 
         private void dgvBooks_SelectionChanged(object sender, EventArgs e)
@@ -153,6 +195,7 @@ namespace BookLendingSystem.Views
             DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
             tableLayoutPanel = new TableLayoutPanel();
             label1 = new UILabel();
+            cboCategory = new UIComboBox();
             txtKeyword = new UITextBox();
             btnSearch = new UIButton();
             dgvBooks = new UIDataGridView();
@@ -163,12 +206,14 @@ namespace BookLendingSystem.Views
             colAuthor = new DataGridViewTextBoxColumn();
             colPublishingHouse = new DataGridViewTextBoxColumn();
             colPublicationDate = new DataGridViewTextBoxColumn();
+            colDescription = new DataGridViewTextBoxColumn();
             colLoansNumber = new DataGridViewTextBoxColumn();
             colTotalNumber = new DataGridViewTextBoxColumn();
             flowLayoutPanel = new FlowLayoutPanel();
             btnAdd = new UIButton();
             btnEdit = new UIButton();
             btnDelete = new UIButton();
+            btnDetail = new UIButton();
             tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvBooks).BeginInit();
             flowLayoutPanel.SuspendLayout();
@@ -182,43 +227,65 @@ namespace BookLendingSystem.Views
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 87F));
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 8F));
             tableLayoutPanel.Controls.Add(label1, 1, 0);
-            tableLayoutPanel.Controls.Add(txtKeyword, 1, 1);
-            tableLayoutPanel.Controls.Add(btnSearch, 2, 1);
-            tableLayoutPanel.Controls.Add(dgvBooks, 1, 2);
-            tableLayoutPanel.Controls.Add(flowLayoutPanel, 1, 3);
+            tableLayoutPanel.Controls.Add(cboCategory, 1, 1);
+            tableLayoutPanel.Controls.Add(txtKeyword, 1, 2);
+            tableLayoutPanel.Controls.Add(btnSearch, 2, 2);
+            tableLayoutPanel.Controls.Add(dgvBooks, 1, 3);
+            tableLayoutPanel.Controls.Add(flowLayoutPanel, 1, 4);
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(0, 0);
             tableLayoutPanel.Name = "tableLayoutPanel";
-            tableLayoutPanel.RowCount = 4;
+            tableLayoutPanel.RowCount = 5;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 45F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
-            tableLayoutPanel.Size = new Size(900, 580);
+            tableLayoutPanel.Size = new Size(800, 480);
             tableLayoutPanel.TabIndex = 0;
             // 
             // label1
             // 
             label1.Font = new Font("隶书", 22.2F, FontStyle.Bold, GraphicsUnit.Point, 134);
             label1.ForeColor = Color.White;
-            label1.Location = new Point(48, 0);
+            label1.Location = new Point(43, 0);
             label1.Name = "label1";
             label1.Size = new Size(184, 60);
             label1.TabIndex = 0;
             label1.Text = "图书管理";
             label1.TextAlign = ContentAlignment.MiddleLeft;
             // 
+            // cboCategory
+            // 
+            cboCategory.DataSource = null;
+            cboCategory.Dock = DockStyle.Fill;
+            cboCategory.FillColor = Color.White;
+            cboCategory.Font = new Font("微软雅黑", 11F);
+            cboCategory.ItemHoverColor = Color.FromArgb(155, 200, 255);
+            cboCategory.ItemSelectForeColor = Color.FromArgb(235, 243, 255);
+            cboCategory.Location = new Point(44, 65);
+            cboCategory.Margin = new Padding(4, 5, 4, 5);
+            cboCategory.MinimumSize = new Size(1, 16);
+            cboCategory.Name = "cboCategory";
+            cboCategory.Padding = new Padding(5, 5, 30, 5);
+            cboCategory.Size = new Size(688, 35);
+            cboCategory.SymbolSize = 24;
+            cboCategory.TabIndex = 5;
+            cboCategory.TextAlignment = ContentAlignment.MiddleLeft;
+            cboCategory.Watermark = "";
+            cboCategory.SelectedIndexChanged += cboCategory_SelectedIndexChanged;
+            // 
             // txtKeyword
             // 
             txtKeyword.Dock = DockStyle.Fill;
             txtKeyword.Font = new Font("微软雅黑", 11F);
-            txtKeyword.Location = new Point(49, 65);
+            txtKeyword.Location = new Point(44, 110);
             txtKeyword.Margin = new Padding(4, 5, 4, 5);
             txtKeyword.MinimumSize = new Size(1, 16);
             txtKeyword.Name = "txtKeyword";
             txtKeyword.Padding = new Padding(5);
             txtKeyword.ShowText = false;
-            txtKeyword.Size = new Size(775, 40);
+            txtKeyword.Size = new Size(688, 35);
             txtKeyword.TabIndex = 1;
             txtKeyword.TextAlignment = ContentAlignment.MiddleLeft;
             txtKeyword.Watermark = "";
@@ -228,11 +295,11 @@ namespace BookLendingSystem.Views
             btnSearch.Dock = DockStyle.Fill;
             btnSearch.FillColor = Color.Transparent;
             btnSearch.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
-            btnSearch.Location = new Point(831, 63);
+            btnSearch.Location = new Point(739, 108);
             btnSearch.MinimumSize = new Size(1, 1);
             btnSearch.Name = "btnSearch";
             btnSearch.RectColor = Color.White;
-            btnSearch.Size = new Size(66, 44);
+            btnSearch.Size = new Size(58, 39);
             btnSearch.Style = UIStyle.Custom;
             btnSearch.TabIndex = 2;
             btnSearch.Text = "搜索";
@@ -255,7 +322,7 @@ namespace BookLendingSystem.Views
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
             dgvBooks.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dgvBooks.ColumnHeadersHeight = 32;
-            dgvBooks.Columns.AddRange(new DataGridViewColumn[] { colId, colBarCode, colBookName, colCategory, colAuthor, colPublishingHouse, colPublicationDate, colLoansNumber, colTotalNumber });
+            dgvBooks.Columns.AddRange(new DataGridViewColumn[] { colId, colBarCode, colBookName, colCategory, colAuthor, colPublishingHouse, colPublicationDate, colDescription, colLoansNumber, colTotalNumber });
             dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle8.BackColor = SystemColors.Window;
             dataGridViewCellStyle8.Font = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point, 134);
@@ -268,7 +335,7 @@ namespace BookLendingSystem.Views
             dgvBooks.EnableHeadersVisualStyles = false;
             dgvBooks.Font = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point, 134);
             dgvBooks.GridColor = Color.FromArgb(80, 160, 255);
-            dgvBooks.Location = new Point(48, 113);
+            dgvBooks.Location = new Point(43, 153);
             dgvBooks.Name = "dgvBooks";
             dgvBooks.RectColor = Color.White;
             dgvBooks.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -287,7 +354,7 @@ namespace BookLendingSystem.Views
             dgvBooks.RowsDefaultCellStyle = dataGridViewCellStyle10;
             dgvBooks.SelectedIndex = -1;
             dgvBooks.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvBooks.Size = new Size(777, 399);
+            dgvBooks.Size = new Size(690, 259);
             dgvBooks.StripeOddColor = Color.FromArgb(235, 243, 255);
             dgvBooks.TabIndex = 3;
             dgvBooks.SelectionChanged += dgvBooks_SelectionChanged;
@@ -354,6 +421,14 @@ namespace BookLendingSystem.Views
             colPublicationDate.Name = "colPublicationDate";
             colPublicationDate.Width = 125;
             // 
+            // colDescription
+            // 
+            colDescription.DataPropertyName = "Description";
+            colDescription.HeaderText = "简介";
+            colDescription.MinimumWidth = 6;
+            colDescription.Name = "colDescription";
+            colDescription.Width = 200;
+            // 
             // colLoansNumber
             // 
             colLoansNumber.DataPropertyName = "LoansNumber";
@@ -379,11 +454,12 @@ namespace BookLendingSystem.Views
             flowLayoutPanel.Controls.Add(btnAdd);
             flowLayoutPanel.Controls.Add(btnEdit);
             flowLayoutPanel.Controls.Add(btnDelete);
+            flowLayoutPanel.Controls.Add(btnDetail);
             flowLayoutPanel.Dock = DockStyle.Fill;
-            flowLayoutPanel.Location = new Point(48, 518);
+            flowLayoutPanel.Location = new Point(43, 418);
             flowLayoutPanel.Name = "flowLayoutPanel";
             flowLayoutPanel.Padding = new Padding(10);
-            flowLayoutPanel.Size = new Size(777, 59);
+            flowLayoutPanel.Size = new Size(690, 59);
             flowLayoutPanel.TabIndex = 4;
             // 
             // btnAdd
@@ -393,7 +469,7 @@ namespace BookLendingSystem.Views
             btnAdd.FillHoverColor = Color.FromArgb(139, 203, 83);
             btnAdd.FillPressColor = Color.FromArgb(88, 152, 32);
             btnAdd.FillSelectedColor = Color.FromArgb(88, 152, 32);
-            btnAdd.Font = new Font("微软雅黑", 11F);
+            btnAdd.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnAdd.LightColor = Color.FromArgb(245, 251, 241);
             btnAdd.Location = new Point(15, 10);
             btnAdd.Margin = new Padding(5, 0, 5, 0);
@@ -417,7 +493,7 @@ namespace BookLendingSystem.Views
             btnEdit.FillHoverColor = Color.FromArgb(227, 175, 83);
             btnEdit.FillPressColor = Color.FromArgb(176, 124, 32);
             btnEdit.FillSelectedColor = Color.FromArgb(176, 124, 32);
-            btnEdit.Font = new Font("微软雅黑", 11F);
+            btnEdit.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnEdit.LightColor = Color.FromArgb(253, 249, 241);
             btnEdit.Location = new Point(115, 10);
             btnEdit.Margin = new Padding(5, 0, 5, 0);
@@ -441,7 +517,7 @@ namespace BookLendingSystem.Views
             btnDelete.FillHoverColor = Color.FromArgb(235, 115, 115);
             btnDelete.FillPressColor = Color.FromArgb(184, 64, 64);
             btnDelete.FillSelectedColor = Color.FromArgb(184, 64, 64);
-            btnDelete.Font = new Font("微软雅黑", 11F);
+            btnDelete.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnDelete.LightColor = Color.FromArgb(253, 243, 243);
             btnDelete.Location = new Point(215, 10);
             btnDelete.Margin = new Padding(5, 0, 5, 0);
@@ -458,13 +534,29 @@ namespace BookLendingSystem.Views
             btnDelete.TipsFont = new Font("宋体", 9F, FontStyle.Regular, GraphicsUnit.Point, 134);
             btnDelete.Click += btnDelete_Click;
             // 
+            // btnDetail
+            // 
+            btnDetail.FillHoverColor = Color.FromArgb(106, 181, 255);
+            btnDetail.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
+            btnDetail.Location = new Point(315, 10);
+            btnDetail.Margin = new Padding(5, 0, 5, 0);
+            btnDetail.MinimumSize = new Size(1, 1);
+            btnDetail.Name = "btnDetail";
+            btnDetail.RectHoverColor = Color.FromArgb(106, 181, 255);
+            btnDetail.Size = new Size(90, 38);
+            btnDetail.Style = UIStyle.Custom;
+            btnDetail.TabIndex = 3;
+            btnDetail.Text = "详情";
+            btnDetail.TipsFont = new Font("宋体", 9F, FontStyle.Regular, GraphicsUnit.Point, 134);
+            btnDetail.Click += btnDetail_Click;
+            // 
             // BookManageForm
             // 
             AllowShowTitle = false;
             AutoScaleMode = AutoScaleMode.None;
             BackgroundImage = Properties.Resources.backgd1;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(900, 580);
+            ClientSize = new Size(800, 480);
             Controls.Add(tableLayoutPanel);
             Name = "BookManageForm";
             Padding = new Padding(0);
@@ -473,7 +565,7 @@ namespace BookLendingSystem.Views
             Text = "图书管理";
             TitleColor = Color.Transparent;
             TitleFont = new Font("楷体", 12F, FontStyle.Bold);
-            ZoomScaleRect = new Rectangle(19, 19, 900, 580);
+            ZoomScaleRect = new Rectangle(19, 19, 800, 480);
             tableLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dgvBooks).EndInit();
             flowLayoutPanel.ResumeLayout(false);
@@ -488,6 +580,8 @@ namespace BookLendingSystem.Views
         private UIButton btnAdd;
         private UIButton btnEdit;
         private UIButton btnDelete;
+        private UIButton btnDetail;
+        private UIComboBox cboCategory;
         private UILabel label1;
         private DataGridViewTextBoxColumn colId;
         private DataGridViewTextBoxColumn colBarCode;
@@ -496,6 +590,7 @@ namespace BookLendingSystem.Views
         private DataGridViewTextBoxColumn colAuthor;
         private DataGridViewTextBoxColumn colPublishingHouse;
         private DataGridViewTextBoxColumn colPublicationDate;
+        private DataGridViewTextBoxColumn colDescription;
         private DataGridViewTextBoxColumn colLoansNumber;
         private DataGridViewTextBoxColumn colTotalNumber;
     }

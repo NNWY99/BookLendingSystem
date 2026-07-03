@@ -164,7 +164,7 @@ namespace BookLendingSystem.Views
             // btnRegister
             // 
             btnRegister.FillColor = Color.Transparent;
-            btnRegister.Font = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point, 134);
+            btnRegister.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnRegister.Location = new Point(138, 351);
             btnRegister.MinimumSize = new Size(1, 1);
             btnRegister.Name = "btnRegister";
@@ -172,13 +172,13 @@ namespace BookLendingSystem.Views
             btnRegister.Size = new Size(100, 40);
             btnRegister.TabIndex = 6;
             btnRegister.Text = "注册";
-            btnRegister.TipsFont = new Font("宋体", 9F, FontStyle.Regular, GraphicsUnit.Point, 134);
+            btnRegister.TipsFont = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnRegister.Click += btnRegister_Click;
             // 
             // btnCancel
             // 
             btnCancel.FillColor = Color.Transparent;
-            btnCancel.Font = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point, 134);
+            btnCancel.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnCancel.Location = new Point(354, 351);
             btnCancel.MinimumSize = new Size(1, 1);
             btnCancel.Name = "btnCancel";

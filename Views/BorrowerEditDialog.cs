@@ -365,7 +365,7 @@ namespace BookLendingSystem.Views
             // 
             btnCancel.BackColor = Color.Transparent;
             btnCancel.FillColor = Color.Transparent;
-            btnCancel.Font = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point, 134);
+            btnCancel.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnCancel.Location = new Point(468, 373);
             btnCancel.MinimumSize = new Size(1, 1);
             btnCancel.Name = "btnCancel";
@@ -381,7 +381,7 @@ namespace BookLendingSystem.Views
             // 
             btnConfirm.BackColor = Color.Transparent;
             btnConfirm.FillColor = Color.Transparent;
-            btnConfirm.Font = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point, 134);
+            btnConfirm.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnConfirm.Location = new Point(203, 373);
             btnConfirm.MinimumSize = new Size(1, 1);
             btnConfirm.Name = "btnConfirm";

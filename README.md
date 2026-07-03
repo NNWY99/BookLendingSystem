@@ -9,7 +9,7 @@
 | 模块 | 功能描述 |
 |------|----------|
 | **登录系统** | 账号密码验证、账户锁定（5次失败锁定15分钟）、注册新账户 |
-| **图书管理** | 添加、修改、删除、搜索图书信息，库存管理 |
+| **图书管理** | 添加、修改、删除、搜索图书，按类别筛选，图书介绍（文字+图片），库存管理 |
 | **借阅人管理** | 添加、修改、删除、搜索借阅人信息 |
 | **借阅操作** | 选择图书和借阅人进行借阅，支持多本同时借阅 |
 | **借阅历史** | 查看借阅记录，支持图书归还操作 |
@@ -83,7 +83,9 @@ CREATE TABLE IF NOT EXISTS Books (
     publicationDate DATETIME NOT NULL,
     loansNumber INT NOT NULL DEFAULT 0,
     TotalNumber INT NOT NULL DEFAULT 0,
-    remark INT DEFAULT 1
+    remark INT DEFAULT 1,
+    description TEXT DEFAULT NULL COMMENT '图书介绍',
+    image_path VARCHAR(500) DEFAULT NULL COMMENT '图片路径'
 );
 
 CREATE TABLE IF NOT EXISTS Borrow (
@@ -143,33 +145,36 @@ BookLendingSystem/
 ├── Model/                    # 实体层
 │   ├── Admin.cs              # 管理员实体
 │   ├── Borrowers.cs          # 借阅人实体
-│   ├── Books.cs              # 图书实体
+│   ├── Books.cs              # 图书实体（含描述和图片路径）
 │   ├── Borrow.cs             # 借阅记录实体
 │   └── Borrowing_details.cs  # 借阅详情实体
 ├── DAL/                      # 数据访问层
-│   ├── DBHelper.cs           # 数据库连接辅助类
+│   ├── DBHelper.cs           # 数据库连接辅助类（自动创建缺失字段）
 │   ├── AdminDAL.cs           # 管理员数据访问
-│   ├── BooksDAL.cs           # 图书数据访问
+│   ├── BooksDAL.cs           # 图书数据访问（含分类查询）
 │   ├── BorrowersDAL.cs       # 借阅人数据访问
 │   ├── BorrowDAL.cs          # 借阅数据访问
 │   └── BorrowingDetailsDAL.cs# 借阅详情数据访问
 ├── BLL/                      # 业务逻辑层
-│   ├── AdminBLL.cs           # 管理员业务逻辑
-│   ├── BooksBLL.cs           # 图书业务逻辑
+│   ├── AdminBLL.cs           # 管理员业务逻辑（含登录锁定）
+│   ├── BooksBLL.cs           # 图书业务逻辑（含分类管理）
 │   ├── BorrowersBLL.cs       # 借阅人业务逻辑
 │   └── BorrowBLL.cs          # 借阅业务逻辑
 ├── Views/                    # 视图层
 │   ├── LoginForm.cs          # 登录窗体
 │   ├── RegisterForm.cs       # 注册窗体
 │   ├── MainForm.cs           # 主窗体
-│   ├── BookManageForm.cs     # 图书管理
-│   ├── BookEditDialog.cs     # 图书编辑对话框
+│   ├── BookManageForm.cs     # 图书管理（含分类筛选）
+│   ├── BookEditDialog.cs     # 图书编辑对话框（含图片上传）
+│   ├── BookDetailDialog.cs   # 图书详情对话框（含介绍和图片）
 │   ├── BorrowerManageForm.cs # 借阅人管理
 │   ├── BorrowerEditDialog.cs # 借阅人编辑对话框
 │   ├── BorrowForm.cs         # 借阅操作
 │   ├── BorrowHistoryForm.cs  # 借阅历史
-│   └── OverdueForm.cs        # 逾期管理
-├── Resources/                # 资源文件
+│   ├── OverdueForm.cs        # 逾期管理
+│   ├── NoFlickerForm.cs      # 防闪烁窗体基类
+│   └── NoFlickerPanel.cs     # 防闪烁面板基类
+├── Resources/                # 资源文件（背景图片）
 ├── BookLendingSystem.csproj  # 项目配置
 ├── BookLendingSystem.sln     # 解决方案文件
 ├── Program.cs                # 程序入口
@@ -191,12 +196,19 @@ BookLendingSystem/
 **安全机制：**
 - 连续5次登录失败，账户将被锁定15分钟
 - 锁定期间无法登录，超时自动解锁
+- 支持注册新账户
 
 ### 图书管理
 
+**基本操作：**
 - 搜索：支持按书名、作者、条码号模糊搜索
-- 添加/编辑：填写图书信息，注意库存数量
+- 添加/编辑：填写图书信息，支持上传封面图片和编写图书介绍
 - 删除：需要先确认该图书没有借阅记录
+
+**图书介绍功能：**
+- 按类别筛选：使用下拉框选择类别，快速过滤图书
+- 查看详情：点击"详情"按钮，查看图书完整信息、封面图片和文字介绍
+- 图片上传：在编辑图书时，点击图片上传按钮选择封面图片
 
 ### 借阅人管理
 
@@ -249,6 +261,18 @@ MainForm
     └── 嵌入的子窗体（TopLevel=false, Dock=Fill）
 ```
 
+### 防闪烁处理
+
+通过拦截 `WM_ERASEBKGND` 消息和启用双缓冲，消除功能切换时的闪白现象。
+
+---
+
+## 数据库自动迁移
+
+系统启动时会自动检测并添加缺失的数据库字段：
+- `description` - TEXT 类型，存储图书文字介绍
+- `image_path` - VARCHAR(500) 类型，存储封面图片路径
+
 ---
 
 ## 常见问题
@@ -266,6 +290,10 @@ MainForm
 - 等待15分钟自动解锁
 - 或联系管理员重置锁定状态
 
+**Q: 图书详情页面信息不显示？**
+- 确认图书已添加描述信息
+- 确认封面图片路径有效
+
 ---
 
 ## 开发规范
@@ -281,6 +309,13 @@ MainForm
 - 使用参数化查询防止 SQL 注入
 - 敏感信息（如密码）不应明文存储
 - 异常信息不应暴露数据库细节
+
+### DAL 层优化
+
+使用泛型辅助方法简化数据查询：
+- `ExecuteQueryToList<T>` - 查询并转换为实体列表
+- `ExecuteQuerySingle<T>` - 查询单个实体
+- `ConvertToModel` - DataRow 到实体的转换
 
 ---
 

@@ -110,16 +110,13 @@ namespace BookLendingSystem.Views
             txtAccount.ShowText = false;
             txtAccount.Size = new Size(200, 32);
             txtAccount.TabIndex = 7;
-            txtAccount.Text = "dsj";
             txtAccount.TextAlignment = ContentAlignment.MiddleLeft;
             txtAccount.Watermark = "";
             // 
             // txtPassword
             // 
             txtPassword.BackColor = Color.Transparent;
-            txtPassword.DoubleValue = 111111D;
             txtPassword.Font = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point, 134);
-            txtPassword.IntValue = 111111;
             txtPassword.Location = new Point(185, 193);
             txtPassword.Margin = new Padding(4, 5, 4, 5);
             txtPassword.MinimumSize = new Size(1, 16);
@@ -129,7 +126,6 @@ namespace BookLendingSystem.Views
             txtPassword.ShowText = false;
             txtPassword.Size = new Size(200, 32);
             txtPassword.TabIndex = 6;
-            txtPassword.Text = "111111";
             txtPassword.TextAlignment = ContentAlignment.MiddleLeft;
             txtPassword.Watermark = "";
             // 

@@ -12,5 +12,7 @@ namespace BookLendingSystem.Model
         public int LoansNumber { get; set; }
         public int TotalNumber { get; set; }
         public int Remark { get; set; } = 1;
+        public string Description { get; set; } = string.Empty;
+        public string ImagePath { get; set; } = string.Empty;
     }
 }

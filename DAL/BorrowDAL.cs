@@ -18,12 +18,16 @@ namespace BookLendingSystem.DAL
 
         public List<Borrow> GetAllBorrows()
         {
+            return ExecuteQueryToList("SELECT * FROM Borrow", ConvertToModel);
+        }
+
+        private List<Borrow> ExecuteQueryToList(string sql, Func<DataRow, Borrow> convertFunc, params MySqlParameter[] parameters)
+        {
             List<Borrow> list = new List<Borrow>();
-            string sql = "SELECT * FROM Borrow";
-            DataTable dt = DBHelper.ExecuteQuery(sql);
+            DataTable dt = DBHelper.ExecuteQuery(sql, parameters);
             foreach (DataRow row in dt.Rows)
             {
-                list.Add(ConvertToModel(row));
+                list.Add(convertFunc(row));
             }
             return list;
         }

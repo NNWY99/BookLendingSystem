@@ -120,6 +120,10 @@ namespace BookLendingSystem.Views
             newForm.Dock = DockStyle.Fill;
             newForm.AutoScroll = true;
             newForm.BackColor = Color.Transparent;
+            newForm.StartPosition = FormStartPosition.CenterParent;
+            newForm.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            newForm.Size = panelMain.Size;
+            newForm.MinimumSize = new Size(0, 0);
             EnableDoubleBuffering(newForm);
 
             panelMain.Controls.Add(newForm);

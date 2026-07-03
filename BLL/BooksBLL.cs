@@ -37,6 +37,16 @@ namespace BookLendingSystem.BLL
             return booksDAL.DeleteBook(id) > 0;
         }
 
+        public List<string> GetAllCategories()
+        {
+            return booksDAL.GetAllCategories();
+        }
+
+        public List<Books> GetBooksByCategory(string category)
+        {
+            return booksDAL.GetBooksByCategory(category);
+        }
+
         public bool DecreaseLoanNumber(int bookId)
         {
             Books book = booksDAL.GetBookById(bookId);

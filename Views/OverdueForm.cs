@@ -141,18 +141,18 @@ namespace BookLendingSystem.Views
             tableLayoutPanel.Name = "tableLayoutPanel";
             tableLayoutPanel.RowCount = 3;
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
-            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 1F));
+            tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
-            tableLayoutPanel.Size = new Size(900, 580);
+            tableLayoutPanel.Size = new Size(800, 480);
             tableLayoutPanel.TabIndex = 0;
             // 
             // label1
             // 
             label1.Font = new Font("隶书", 22.2F, FontStyle.Bold, GraphicsUnit.Point, 134);
             label1.ForeColor = Color.FromArgb(220, 53, 69);
-            label1.Location = new Point(48, 0);
+            label1.Location = new Point(43, 0);
             label1.Name = "label1";
-            label1.Size = new Size(187, 60);
+            label1.Size = new Size(199, 60);
             label1.TabIndex = 0;
             label1.Text = "逾期管理";
             label1.TextAlign = ContentAlignment.MiddleLeft;
@@ -186,7 +186,7 @@ namespace BookLendingSystem.Views
             dgvOverdue.EnableHeadersVisualStyles = false;
             dgvOverdue.Font = new Font("宋体", 12F, FontStyle.Regular, GraphicsUnit.Point, 134);
             dgvOverdue.GridColor = Color.FromArgb(220, 53, 69);
-            dgvOverdue.Location = new Point(48, 63);
+            dgvOverdue.Location = new Point(43, 63);
             dgvOverdue.Name = "dgvOverdue";
             dgvOverdue.RectColor = Color.White;
             dgvOverdue.RowHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
@@ -196,7 +196,7 @@ namespace BookLendingSystem.Views
             dgvOverdue.RowsDefaultCellStyle = dataGridViewCellStyle4;
             dgvOverdue.SelectedIndex = -1;
             dgvOverdue.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvOverdue.Size = new Size(804, 449);
+            dgvOverdue.Size = new Size(714, 349);
             dgvOverdue.StripeOddColor = Color.FromArgb(255, 243, 243);
             dgvOverdue.TabIndex = 1;
             // 
@@ -230,6 +230,7 @@ namespace BookLendingSystem.Views
             colBorrowerName.HeaderText = "借阅人";
             colBorrowerName.MinimumWidth = 6;
             colBorrowerName.Name = "colBorrowerName";
+            colBorrowerName.Width = 125;
             // 
             // colTel
             // 
@@ -275,15 +276,15 @@ namespace BookLendingSystem.Views
             flowLayoutPanel.Controls.Add(btnRefresh);
             flowLayoutPanel.Controls.Add(btnReturn);
             flowLayoutPanel.Dock = DockStyle.Fill;
-            flowLayoutPanel.Location = new Point(48, 518);
+            flowLayoutPanel.Location = new Point(43, 418);
             flowLayoutPanel.Name = "flowLayoutPanel";
             flowLayoutPanel.Padding = new Padding(10);
-            flowLayoutPanel.Size = new Size(804, 59);
+            flowLayoutPanel.Size = new Size(714, 59);
             flowLayoutPanel.TabIndex = 2;
             // 
             // btnRefresh
             // 
-            btnRefresh.Font = new Font("微软雅黑", 11F);
+            btnRefresh.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnRefresh.Location = new Point(15, 10);
             btnRefresh.Margin = new Padding(5, 0, 5, 0);
             btnRefresh.MinimumSize = new Size(1, 1);
@@ -302,7 +303,7 @@ namespace BookLendingSystem.Views
             btnReturn.FillHoverColor = Color.FromArgb(139, 203, 83);
             btnReturn.FillPressColor = Color.FromArgb(88, 152, 32);
             btnReturn.FillSelectedColor = Color.FromArgb(88, 152, 32);
-            btnReturn.Font = new Font("微软雅黑", 11F);
+            btnReturn.Font = new Font("楷体", 12F, FontStyle.Bold, GraphicsUnit.Point, 134);
             btnReturn.LightColor = Color.FromArgb(245, 251, 241);
             btnReturn.Location = new Point(125, 10);
             btnReturn.Margin = new Padding(5, 0, 5, 0);
@@ -326,7 +327,7 @@ namespace BookLendingSystem.Views
             BackColor = Color.Transparent;
             BackgroundImage = Properties.Resources.backgd1;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(900, 580);
+            ClientSize = new Size(800, 480);
             Controls.Add(tableLayoutPanel);
             Name = "OverdueForm";
             Padding = new Padding(0);
