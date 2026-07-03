@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BookLendingSystem": {
+      "commandName": "Project",
+      "hotReloadEnabled": false
+    }
+  }
+}
