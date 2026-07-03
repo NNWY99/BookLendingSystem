@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace BookLendingSystem.Views
 {
-    public partial class BorrowerManageForm : UIForm
+    public partial class BorrowerManageForm : NoFlickerForm
     {
         private BorrowersBLL borrowersBLL = new BorrowersBLL();
         private Borrowers currentBorrower = null;
@@ -15,7 +15,18 @@ namespace BookLendingSystem.Views
         public BorrowerManageForm()
         {
             InitializeComponent();
+            EnableDoubleBuffering(tableLayoutPanel);
+            EnableDoubleBuffering(dgvBorrowers);
             LoadBorrowers();
+        }
+
+        private void EnableDoubleBuffering(Control control)
+        {
+            typeof(Control).InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.SetProperty |
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic,
+                null, control, new object[] { true });
         }
 
         private void LoadBorrowers()
@@ -429,7 +440,7 @@ namespace BookLendingSystem.Views
             btnDelete.RectHoverColor = Color.FromArgb(235, 115, 115);
             btnDelete.RectPressColor = Color.FromArgb(184, 64, 64);
             btnDelete.RectSelectedColor = Color.FromArgb(184, 64, 64);
-            btnDelete.Size = new Size(90, 38);
+            btnDelete.Size = new Size(96, 38);
             btnDelete.Style = UIStyle.Custom;
             btnDelete.TabIndex = 2;
             btnDelete.Text = "删除";

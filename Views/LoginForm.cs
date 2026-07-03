@@ -13,6 +13,16 @@ namespace BookLendingSystem.Views
         public LoginForm()
         {
             InitializeComponent();
+            EnableDoubleBuffering(this);
+        }
+
+        private void EnableDoubleBuffering(Control control)
+        {
+            typeof(Control).InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.SetProperty |
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic,
+                null, control, new object[] { true });
         }
 
         private void btnLogin_Click(object sender, EventArgs e)

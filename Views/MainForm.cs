@@ -15,6 +15,16 @@ namespace BookLendingSystem.Views
             CurrentAdmin = admin;
             InitializeComponent();
             lblUserInfo.Text = $"用户：{admin.AdminName}";
+            EnableDoubleBuffering(panelMain);
+        }
+
+        private void EnableDoubleBuffering(Control control)
+        {
+            typeof(Control).InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.SetProperty |
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic,
+                null, control, new object[] { true });
         }
 
         private void btnBookManage_Click(object sender, EventArgs e)
@@ -44,14 +54,6 @@ namespace BookLendingSystem.Views
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            foreach (Form form in Application.OpenForms)
-            {
-                if (form is LoginForm)
-                {
-                    form.Close();
-                    break;
-                }
-            }
             foreach (Control ctrl in panelMain.Controls)
             {
                 if (ctrl is Form)
@@ -59,9 +61,25 @@ namespace BookLendingSystem.Views
                     ((Form)ctrl).Close();
                 }
             }
-            LoginForm loginForm = new LoginForm();
-            loginForm.Show();
-            this.Close();
+            LoginForm loginForm = null;
+            foreach (Form form in Application.OpenForms)
+            {
+                if (form is LoginForm)
+                {
+                    loginForm = (LoginForm)form;
+                    break;
+                }
+            }
+            if (loginForm != null)
+            {
+                loginForm.Show();
+            }
+            else
+            {
+                loginForm = new LoginForm();
+                loginForm.Show();
+            }
+            this.Hide();
         }
 
         private void btnExit_Click(object sender, EventArgs e)
@@ -79,6 +97,8 @@ namespace BookLendingSystem.Views
                     return;
                 }
             }
+
+            panelMain.SuspendLayout();
 
             Form newForm;
             if (param != null)
@@ -99,9 +119,14 @@ namespace BookLendingSystem.Views
             newForm.Text = string.Empty;
             newForm.Dock = DockStyle.Fill;
             newForm.AutoScroll = true;
+            newForm.BackColor = Color.Transparent;
+            EnableDoubleBuffering(newForm);
+
             panelMain.Controls.Add(newForm);
             newForm.Show();
             newForm.BringToFront();
+
+            panelMain.ResumeLayout(false);
         }
 
         private void InitializeComponent()
@@ -118,7 +143,7 @@ namespace BookLendingSystem.Views
             btnOverdue = new UIButton();
             lblUserInfo = new UILabel();
             lblTitle = new UILabel();
-            panelMain = new Panel();
+            panelMain = new NoFlickerPanel();
             panelLeft.SuspendLayout();
             bottomFlowPanel.SuspendLayout();
             navFlowPanel.SuspendLayout();
@@ -340,7 +365,7 @@ namespace BookLendingSystem.Views
         }
 
         private UIPanel panelLeft;
-        private Panel panelMain;
+        private NoFlickerPanel panelMain;
         private FlowLayoutPanel navFlowPanel;
         private FlowLayoutPanel bottomFlowPanel;
         private UIButton btnBookManage;

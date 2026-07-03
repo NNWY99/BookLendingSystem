@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace BookLendingSystem.Views
 {
-    public partial class BorrowForm : UIForm
+    public partial class BorrowForm : NoFlickerForm
     {
         private Admin currentAdmin;
         private BooksBLL booksBLL = new BooksBLL();
@@ -21,7 +21,23 @@ namespace BookLendingSystem.Views
         {
             currentAdmin = admin;
             InitializeComponent();
+            EnableDoubleBuffering(tableLayoutPanel);
+            EnableDoubleBuffering(dgvBooks);
+            EnableDoubleBuffering(leftPanel);
+            EnableDoubleBuffering(rightPanel);
+            EnableDoubleBuffering(leftTable);
+            EnableDoubleBuffering(rightTable);
+            EnableDoubleBuffering(lstSelectedBooks);
             LoadBooks();
+        }
+
+        private void EnableDoubleBuffering(Control control)
+        {
+            typeof(Control).InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.SetProperty |
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic,
+                null, control, new object[] { true });
         }
 
         private void LoadBooks()
@@ -175,10 +191,10 @@ namespace BookLendingSystem.Views
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            tableLayoutPanel = new TableLayoutPanel();
+            tableLayoutPanel = new NoFlickerTableLayoutPanel();
             label1 = new UILabel();
-            leftPanel = new UIPanel();
-            leftTable = new TableLayoutPanel();
+            leftPanel = new NoFlickerUIPanel();
+            leftTable = new NoFlickerTableLayoutPanel();
             txtBookKeyword = new UITextBox();
             btnSearchBook = new UIButton();
             dgvBooks = new UIDataGridView();
@@ -190,10 +206,10 @@ namespace BookLendingSystem.Views
             colLoansNumber = new DataGridViewTextBoxColumn();
             btnAddBook = new UIButton();
             btnRemoveBook = new UIButton();
-            rightPanel = new UIPanel();
-            rightTable = new TableLayoutPanel();
+            rightPanel = new NoFlickerUIPanel();
+            rightTable = new NoFlickerTableLayoutPanel();
             label3 = new UILabel();
-            lstSelectedBooks = new ListBox();
+            lstSelectedBooks = new NoFlickerListBox();
             label2 = new UILabel();
             txtBorrowerKeyword = new UITextBox();
             btnSearchBorrower = new UIButton();
@@ -663,11 +679,11 @@ namespace BookLendingSystem.Views
             ResumeLayout(false);
         }
 
-        private TableLayoutPanel tableLayoutPanel;
-        private UIPanel leftPanel;
-        private UIPanel rightPanel;
-        private TableLayoutPanel leftTable;
-        private TableLayoutPanel rightTable;
+        private NoFlickerTableLayoutPanel tableLayoutPanel;
+        private NoFlickerUIPanel leftPanel;
+        private NoFlickerUIPanel rightPanel;
+        private NoFlickerTableLayoutPanel leftTable;
+        private NoFlickerTableLayoutPanel rightTable;
         private UIDataGridView dgvBooks;
         private DataGridViewTextBoxColumn colId;
         private DataGridViewTextBoxColumn colBarCode;
@@ -675,7 +691,7 @@ namespace BookLendingSystem.Views
         private DataGridViewTextBoxColumn colCategory;
         private DataGridViewTextBoxColumn colAuthor;
         private DataGridViewTextBoxColumn colLoansNumber;
-        private ListBox lstSelectedBooks;
+        private NoFlickerListBox lstSelectedBooks;
         private UITextBox txtBookKeyword;
         private UITextBox txtBorrowerKeyword;
         private UITextBox txtDays;

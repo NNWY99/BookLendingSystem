@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace BookLendingSystem.Views
 {
-    public partial class BookManageForm : UIForm
+    public partial class BookManageForm : NoFlickerForm
     {
         private BooksBLL booksBLL = new BooksBLL();
         private Books currentBook = null;
@@ -15,7 +15,18 @@ namespace BookLendingSystem.Views
         public BookManageForm()
         {
             InitializeComponent();
+            EnableDoubleBuffering(tableLayoutPanel);
+            EnableDoubleBuffering(dgvBooks);
             LoadBooks();
+        }
+
+        private void EnableDoubleBuffering(Control control)
+        {
+            typeof(Control).InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.SetProperty |
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic,
+                null, control, new object[] { true });
         }
 
         private void LoadBooks()

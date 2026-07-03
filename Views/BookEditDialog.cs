@@ -12,6 +12,7 @@ namespace BookLendingSystem.Views
         public BookEditDialog(Books book = null)
         {
             InitializeComponent();
+            EnableDoubleBuffering(tableLayoutPanel);
             if (book != null)
             {
                 Tag = book;
@@ -69,6 +70,15 @@ namespace BookLendingSystem.Views
         {
             DialogResult = DialogResult.Cancel;
             Close();
+        }
+
+        private void EnableDoubleBuffering(Control control)
+        {
+            typeof(Control).InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.SetProperty |
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic,
+                null, control, new object[] { true });
         }
 
         private bool ValidateInput()

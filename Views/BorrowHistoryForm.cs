@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace BookLendingSystem.Views
 {
-    public partial class BorrowHistoryForm : UIForm
+    public partial class BorrowHistoryForm : NoFlickerForm
     {
         private BorrowBLL borrowBLL = new BorrowBLL();
         private DataGridViewTextBoxColumn colId;
@@ -22,7 +22,18 @@ namespace BookLendingSystem.Views
         public BorrowHistoryForm()
         {
             InitializeComponent();
+            EnableDoubleBuffering(tableLayoutPanel);
+            EnableDoubleBuffering(dgvHistory);
             LoadHistory();
+        }
+
+        private void EnableDoubleBuffering(Control control)
+        {
+            typeof(Control).InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.SetProperty |
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic,
+                null, control, new object[] { true });
         }
 
         private void LoadHistory()
